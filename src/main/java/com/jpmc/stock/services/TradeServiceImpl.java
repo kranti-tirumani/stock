@@ -25,6 +25,7 @@ public class TradeServiceImpl implements  TradeService{
 
     /*
      *This method is used to record the Trade entry
+     * Having and throwing custom Exception class is more suitable here but due to time constraint couldnt create that
      */
     @Override
     public void saveTrade(TradeCommand tradeCommand) throws Exception {
