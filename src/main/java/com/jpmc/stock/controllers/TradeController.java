@@ -18,6 +18,7 @@ public class TradeController {
 
     /*
      * Sample rest call to test http://localhost:8080/recordTrade?symbol=QCOM&type=Common&quantity=100&tradePrice=12.35&stockPrice=12.3
+     *Post request is more suitable here but mentioned Get for testing.
      */
     @GetMapping("/recordTrade")
     public void recordTrade(TradeCommand tradeCommand){
