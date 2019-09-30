@@ -36,6 +36,9 @@ dependencies {
     // mandatory dependencies for using Spock
     compile "org.codehaus.groovy:groovy-all:2.5.7"
     testCompile "org.spockframework:spock-core:1.3-groovy-2.5"
+    testCompile 'cglib:cglib-nodep:3.2.4'
+    testCompile 'org.objenesis:objenesis:2.5.1'
+    //testCompile "org.grails:grails-test-mixins:3.3.0"
     
     runtime 'com.h2database:h2'
 

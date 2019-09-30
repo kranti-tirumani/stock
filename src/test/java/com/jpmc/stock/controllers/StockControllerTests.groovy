@@ -1,21 +1,12 @@
 package com.jpmc.stock.controllers
 
-import com.jpmc.stock.services.StockService
+import com.jpmc.stock.Exception.StockException
 import com.jpmc.stock.services.StockServiceImpl
-import groovy.transform.CompileStatic
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import org.codehaus.groovy.transform.sc.StaticCompileTransformation
 import spock.lang.Specification
 
-/*
 
-    * some how I am seeing some issues with groovy and spock dependencies so not uploading failing test cases
-    * Rather I verified the test cases with rest calls.
-
- */
-@CompileStatic
-public class StockControllerTest extends Specification {
+//@CompileStatic
+public class StockControllerTests extends Specification {
     String stock
     Double price
     Double dividend
@@ -23,7 +14,7 @@ public class StockControllerTest extends Specification {
     StockServiceImpl service
     def setup(){
         controller = new StockController()
-        service = new StockServiceImpl()
+        service = Mock(StockServiceImpl)
         controller.stockService = service
     }
 
@@ -36,8 +27,51 @@ public class StockControllerTest extends Specification {
         dividend = controller.getDividend(stock, price)
 
         then:
-        service.getDividend(stock,price) >>  new Double(10)
-        dividend == 23.0
+        service.getDividend(_ as String, _ as Double) >>  new Double(2)
+        dividend == 2.0
+    }
+
+    def "dividend with error case"(){
+        given:
+        stock = "QCOM"
+        price = new Double(10)
+
+        when:
+        dividend = controller.getDividend(stock, price)
+
+        then:
+        service.getDividend(_ as String, _ as Double) >>  {String s, Double d ->
+            throw new StockException("Error occured!")
+        }
+        dividend == 0.0
+    }
+
+    def "p/e ratio with valid stock and price"(){
+        given:
+        stock = "QCOM"
+        price = new Double(10)
+
+        when:
+        dividend = controller.getPERatio(stock, price)
+
+        then:
+        service.getPERatio(_ as String, _ as Double) >>  new Double(2)
+        dividend == 2.0
+    }
+
+    def "p/e ratio with error case"(){
+        given:
+        stock = "QCOM"
+        price = new Double(10)
+
+        when:
+        dividend = controller.getPERatio(stock, price)
+
+        then:
+        service.getPERatio(_ as String, _ as Double) >>  {String s, Double d ->
+            throw new StockException("Error occured!")
+        }
+        dividend == 0.0
     }
 
 }

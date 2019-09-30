@@ -1,5 +1,6 @@
 package com.jpmc.stock.controllers;
 
+import com.jpmc.stock.Exception.StockException;
 import com.jpmc.stock.services.TradeServiceImpl;
 import com.jpmc.stock.vo.TradeCommand;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class TradeController {
     public void recordTrade(TradeCommand tradeCommand){
         try {
             tradeService.saveTrade(tradeCommand);
-        } catch (Exception exception){
+        } catch (StockException exception){
             logger.error(exception);
         }
     }
@@ -33,13 +34,7 @@ public class TradeController {
      */
     @GetMapping("/getVolumeWeightedStockPrice")
     public Double getVolumeWeightedStockPrice(String stockName){
-        Double volumeWeightedStockPrice = 0.0;
-        try {
-            volumeWeightedStockPrice = tradeService.getVolumeWeightedStockPrice(stockName);
-        } catch (Exception exception){
-            logger.error(exception);
-        }
-        return volumeWeightedStockPrice;
+        return tradeService.getVolumeWeightedStockPrice(stockName);
     }
 
     /*
@@ -49,12 +44,6 @@ public class TradeController {
 
     @GetMapping("/getGCBE")
     public Double getGCBE(){
-        Double gcbe = 0.0;
-        try {
-            tradeService.getGBCEIndex();
-        } catch (Exception exception){
-            logger.error(exception);
-        }
-        return gcbe;
+        return tradeService.getGBCEIndex();
     }
 }

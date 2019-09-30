@@ -1,5 +1,6 @@
 package com.jpmc.stock.controllers;
 
+import com.jpmc.stock.Exception.StockException;
 import com.jpmc.stock.services.StockServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ public class StockController {
         Double dividend = 0.0;
         try{
             dividend = stockService.getDividend(stockSymbol, price);
-        } catch (Exception exception){
+        } catch (StockException exception){
            logger.error(exception);
         }
         return dividend;
@@ -37,7 +38,7 @@ public class StockController {
         Double peRatio = 0.0;
         try {
             peRatio = stockService.getPERatio(stockSymbol, price);
-        } catch (Exception exception){
+        } catch (StockException exception){
             logger.error(exception);
         }
         return peRatio;

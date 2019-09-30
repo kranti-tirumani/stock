@@ -1,5 +1,6 @@
 package com.jpmc.stock.services;
 
+import com.jpmc.stock.Exception.StockException;
 import com.jpmc.stock.dao.StockRepo;
 import com.jpmc.stock.dao.TradeRepo;
 import com.jpmc.stock.model.Stock;
@@ -27,7 +28,7 @@ public class TradeServiceImpl implements  TradeService{
      *This method is used to record the Trade entry
      */
     @Override
-    public void saveTrade(TradeCommand tradeCommand) throws Exception {
+    public void saveTrade(TradeCommand tradeCommand) throws StockException {
         logger.debug("saveTrade", "Trade values "+tradeCommand);
         Trade trade = new Trade();
         trade.setStockSymbol(tradeCommand.getSymbol());
@@ -48,6 +49,9 @@ public class TradeServiceImpl implements  TradeService{
         Double sumOfTradePrice = 0.0;
         Long sumOfQuantity = 0L;
         List<Trade> trades = tradeRepo.findAllByStockSymbolAndTradeDateGreaterThan(stockName, new Date(System.currentTimeMillis() - 900 * 1000));
+        if(null == trades){
+            return 0.0;
+        }
         for(Trade trade: trades){
             sumOfTradePrice = sumOfTradePrice + (trade.getTradePrice()*trade.getQuantity());
             sumOfQuantity = sumOfQuantity + trade.getQuantity();
@@ -63,6 +67,9 @@ public class TradeServiceImpl implements  TradeService{
     public Double getGBCEIndex(){
         Double gcbe = 0.0;
         List<Stock> stocks = (List<Stock>) stockRepo.findAll();
+        if(null == stocks){
+            return 0.0;
+        }
         for(Stock stock:stocks){
             gcbe = computeGCBE(stock.getStockSymbol()) + gcbe;
         }
